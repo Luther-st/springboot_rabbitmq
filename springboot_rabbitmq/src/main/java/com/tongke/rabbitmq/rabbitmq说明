@@ -1,0 +1,53 @@
+官网：http://www.rabbitmq.com/
+一、安装配置：
+    1、设置主机名字：
+        cd etc/
+        vim hostname 设置一个名字保存退出（不用“”，也不用什么符号）
+    2、如果要设置集群，要修改配置etc文件夹下的hosts文件：
+        vim hosts
+        输入：IP地址 主机名（如：192.168.11.22 tongke01）
+    3、创建存放安装包的文件夹，并下载安装包：
+        mkdir /root/software
+        wget www.rabbitmq.com/releases/erlang/erlang-18.3-1.el7.centos.x86_64.rpm
+        wget http://repo.iotti.biz/CentOS/7/x86_64/socat-1.7.3.2-5.el7.lux.x86_64.rpm
+        wget www.rabbitmq.com/releases/rabbitmq-server/v3.6.5/rabbitmq-server-3.6.5-1.noarch.rpm
+    4、关闭防火墙：systemctl stop firewalld
+    5、自动安装(注意先后顺序)：
+        rpm -ivh erlang-18.3-1.el7.centos.x86_64.rpm
+        rpm -ivh socat-1.7.3.2-5.el7.lux.x86_64.rpm
+        rpm -ivh rabbitmq-server-3.6.5-1.noarch.rpm
+    6、修改配置文件：
+        vim /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.5/ebin/rabbit.app
+        设置用户名密码，找到loopback_users中的“《"guest"》”，删除外面的《“，只保留guest
+    7、启动和关闭：
+        后台启动：rabbitmq-server start &
+        关闭：rabbitmqctl app_stop
+    8、启动管理插件：
+        rabbitmq-plugins enable rabbitmq_management
+    9、插件访问路径：http://192.168.222.133:15672/#/
+
+二、简介：
+    1、集群模式丰富，表达式配置，HA模式、镜像队列模型；
+    2、保证数据不丢失的前提做到高可靠性、可用性；
+    3、AMQP全称：Advancee Message Queuing Protocol,翻译过来的意思是：高级消息队列协议
+
+三、核心概念：
+    1、server：又称Broker，接受客户端的连接，实现AMQP实体服务
+    2、Connection：连接，应用程序与Broker的网络连接
+    3、Channel：网络信道，几乎所有的操作都在Channel中进行，Channel是进行消息读写的通道。客户端可建立多个Channel，每个Channel代表这一个会话任务
+    4、Message：消息，服务器和应用程序之间传送的数据，由Properties和body组成。Properties可以对消息进行修饰，比如消息的优先级、延迟等高级特性；body则是消息体内容
+    5、Virtual host：虚拟地址，用于进行逻辑隔离，最上层的消息路由。一个Virtual host里面可以有若干个Exchange和Queue，同一个Virtual host里面不能有相同名称的Exchange或Queue
+    6、Exchange：交换机，接收消息，根据路由键转发消息到绑定的队列
+    7、Queue：也称为Message Queue,消息队列，保存消息并将它们转发给消费者
+    8、Binding：Exchange和Queue之间的虚拟连接，binding中可以包含routing key
+    9、Routing key：一个路由规则，虚拟机可以用它来确定如何路由一个消息
+四、在后台“http://192.168.222.133:15672/#/”中创建“Exchanges”和“Queues”，并且绑定在一起；或者在接收者的代码中绑定
+
+五、案例说明：
+factory：工厂模式（竞争）
+helloWord：简单的模式
+mukewang：传实体类
+subscribe：发布订阅模式
+
+
+

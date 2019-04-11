@@ -1,0 +1,33 @@
+server:
+  port:  5034
+  servlet:
+    context-path: /
+spring:
+  rabbitmq:
+    username: guest
+    password: guest
+    virtual-host: /
+    template:
+      receive-timeout: 15000
+    listener:
+      simple:
+        concurrency: 5  #最大的并发数
+        acknowledge-mode: auto #签收的方式：none：什么也不配置,manual：手工签收,auto：自动签收
+        max-concurrency: 10 #最大的并发数
+        prefetch: 1 #限制接收的数量 192.168.222.133
+    host: localhost
+    port: 5672
+  http:
+    encoding:
+      charset: UTF-8
+  jackson:
+    date-format:  yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: NON_NULL
+  datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/test?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+      username: root
+      password: Aa123456
+
+
